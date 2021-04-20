@@ -64,11 +64,6 @@ namespace PdfMerge
             System.Diagnostics.Process.Start(fullPath);
         }
 
-        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void button3_Click(object sender, EventArgs e)
         {
             listBox1.Items.Clear();
