@@ -3,8 +3,10 @@ using PdfSharp.Pdf;
 using PdfSharp.Pdf.IO;
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Text;
 using System.Windows.Forms;
 
 namespace PdfMerge
@@ -20,6 +22,7 @@ namespace PdfMerge
         {
             openFileDialog1.Multiselect = true;
             openFileDialog1.Filter = "PDF files (*.pdf)|*.pdf";
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         }
 
         private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
@@ -57,11 +60,18 @@ namespace PdfMerge
                     outputDocument.AddPage(page);
                 }
             }
+            
             outputDocument.Save(oFileName);
 
-            string exeFile = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string exeFile = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
             string fullPath = Path.Combine(exeFile, oFileName);
-            System.Diagnostics.Process.Start(fullPath);
+
+            ProcessStartInfo psi = new ProcessStartInfo
+            {
+                FileName = fullPath,
+                UseShellExecute = true
+            };
+            Process.Start(psi);
         }
 
         private void button3_Click(object sender, EventArgs e)
